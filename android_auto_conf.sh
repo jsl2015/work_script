@@ -1,4 +1,5 @@
 #! /bin/bash
+#usage: sh android_auto_conf.sh SVS_ID 服务器名 IP 公告文件
 
 dir1=/var/www/html
 dir2=/usr/local/backup
