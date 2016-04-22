@@ -3,9 +3,27 @@
 
 dir1=/var/www/html
 dir2=/usr/local/src/lilith_op
+dir3=/usr/local/back
 old_ip=`awk -F"\"" '/=>/ {print $2}' $dir1/djsy/host.php | tail -1`
 old_name=`awk -F"\"" '/=>/ {print $4}' $dir1/djsy/host.php | tail -1`
 old_tool_id=$(($1-1))
+
+#备份
+a=(list host new settings server_cfg)
+for i in $dir1/1/gameweb $dir1/djsy $dir1/daojian/app/config $dir2/dotalegend $dir2/conf;do
+        cd $i
+          if [ "$i" = "$dir1/1/gameweb" ];then
+            tar -czvf $dir3/${a[0]}_`date +%m-%d`.tar.gz *
+          elif [ "$i" = "$dir1/djsy" ];then
+            tar -czvf $dir3/${a[1]}_`date +%m-%d`.tar.gz *
+          elif [ "$i" = "$dir1/daojian/app/config" ];then
+            tar -czvf $dir3/${a[2]}_`date +%m-%d`.tar.gz *
+          elif [ "$i" = "$dir2/dotalegend" ];then
+            tar -czvf $dir3/${a[3]}_`date +%m-%d`.tar.gz *
+          elif [ "$i" = "$dir2/conf" ];then
+            tar -czvf $dir3/${a[4]}_`date +%m-%d`.tar.gz *
+          fi
+done
 
 #加入列表
 sed -i ' s/  {id = "8".*/  {id = "8", name = "'$2'", ip = "'$3'", port=10000,state="推荐", color=0xFF5014},/g' $dir1/1/gameweb/serverlist.txt
