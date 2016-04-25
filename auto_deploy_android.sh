@@ -9,21 +9,22 @@ old_name=`awk -F"\"" '/=>/ {print $4}' $dir1/djsy/host.php | tail -1`
 old_tool_id=$(($1-1))
 
 #备份
-a=(list host new settings server_cfg)
 for i in $dir1/1/gameweb $dir1/djsy $dir1/daojian/app/config $dir2/dotalegend $dir2/conf;do
         cd $i
           if [ "$i" = "$dir1/1/gameweb" ];then
-            tar -czvf $dir3/${a[0]}_`date +%m-%d`.tar.gz *
+            tar -czvf $dir3/list_`date +%m-%d`.tar.gz *
           elif [ "$i" = "$dir1/djsy" ];then
-            tar -czvf $dir3/${a[1]}_`date +%m-%d`.tar.gz *
+            tar -czvf $dir3/host_`date +%m-%d`.tar.gz *
           elif [ "$i" = "$dir1/daojian/app/config" ];then
-            tar -czvf $dir3/${a[2]}_`date +%m-%d`.tar.gz *
+            tar -czvf $dir3/new_`date +%m-%d`.tar.gz *
           elif [ "$i" = "$dir2/dotalegend" ];then
-            tar -czvf $dir3/${a[3]}_`date +%m-%d`.tar.gz *
+            tar -czvf $dir3/settings_`date +%m-%d`.tar.gz *
           elif [ "$i" = "$dir2/conf" ];then
-            tar -czvf $dir3/${a[4]}_`date +%m-%d`.tar.gz *
+            tar -czvf $dir3/servera_cfg_`date +%m-%d`.tar.gz *
           fi
 done
+find $dir3 -mtime +3 | xargs rm -fr {}
+echo "backup finished."
 
 #加入列表
 sed -i ' s/  {id = "8".*/  {id = "8", name = "'$2'", ip = "'$3'", port=10000,state="推荐", color=0xFF5014},/g' $dir1/1/gameweb/serverlist.txt
@@ -63,3 +64,5 @@ sed -i "/'oss00"$1"'/s/"$old_name"/"$2"/" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$old_tool_id"':{/h; //G" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$old_tool_id"':{/{x;s/^/./;/^.\{2\}$/{x;s/oss00"$old_tool_id"/oss00"$1"/;b};x}" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$1"'/s/"$old_ip"/"$3"/" $dir2/conf/server_cfg.py
+
+echo "deploy finished."
