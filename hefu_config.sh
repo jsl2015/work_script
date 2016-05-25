@@ -9,8 +9,8 @@ master_ip=10.105.224.199
 master_id=111
 slave1_ip=10.105.28.134
 slave1_id=112
-slave2_ip=10.105.53.73
-slave2_id=113
+slave2_ip=0
+slave2_id=0
 
 cd /home/server
 sh stop.sh
@@ -61,7 +61,10 @@ sleep 10
 
 while :
  do
-   if [ -e /home/charge_3.sql ];then
+   if [ $slave2_ip = 0 ];then
+     echo "finished."
+     break
+   elif [ -e /home/charge_3.sql ];then
      sed -i 's/change_db_1, false/change_db_1, true/g' $hefu_file
      sed -i 's/2, "'$slave1_ip'"/2, "'$slave2_ip'"/g' $hefu_file
      sed -i 's/id_2, "'$slave1_id'"/id_2, "'$slave2_id'"/g' $hefu_file
@@ -69,7 +72,7 @@ while :
      ./start-dev.sh > /home/hefu2.log 2>&1 &
      echo -e "\033[33m hefu begining================= \033[0m"
        while :
-	    do 
+	do
            if tail /home/hefu2.log | grep change_all_end;then
              kill -2 $!
              $mysql -uroot -p$my_passwd test < /home/charge_3.sql
@@ -80,6 +83,11 @@ while :
                         select vSerial,vFrom,vUin,dtEventTime,iOrderMoney,iGoodsId,iGoodsCnt,iStatus,b.iUserId  
                         from test.charge_3 a, dgame_game_db_1.user b 
                         where a.vUin = b.vDeviceId;" -uroot -p$my_passwd
+             user_count=`$mysql -e 'select count(*) from dgame_game_db_1.user;' -uroot -p$my_passwd`
+             charge_count=`$mysql -e 'select count(*) from dgame_game_db_1.charge;' -uroot -p$my_passwd`
+             charge_sum=`$mysql -e 'select sum(iordermoney) from dgame_game_db_1.charge;' -uroot -p$my_passwd`
+             echo -e "\033[33m Total user is:${user_count}\nTotal charge is:${charge_count}\nSum of iordermoney is:${charge_sum} \033[0m"
+             sleep 3
            break  
 	   fi
        done
@@ -87,8 +95,3 @@ while :
    else echo "Please put charge_3.sql into /home."
    fi
 done
-user_count=`$mysql -e 'select count(*) from dgame_game_db_1.user;' -uroot -p$my_passwd`
-charge_count=`$mysql -e 'select count(*) from dgame_game_db_1.charge;' -uroot -p$my_passwd`
-charge_sum=`$mysql -e 'select sum(iordermoney) from dgame_game_db_1.charge;' -uroot -p$my_passwd`
-echo -e "\033[33m Total user is:${user_count}\nTotal charge is:${charge_count}\nSum of iordermoney is:${charge_sum} \033[0m"
-sleep 3
