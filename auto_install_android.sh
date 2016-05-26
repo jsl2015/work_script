@@ -1,6 +1,7 @@
 #! /bin/bash
 #usage: sh auto_install.sh SVS_ID 服务器名 IP
 
+my_passwd="EK3FMif4pPQY"
 #挂载云盘
 mkdir /homebak
 mv /home/* /homebak/
@@ -23,6 +24,11 @@ if [ `ls /homebak | wc -l` -eq 0 ];then
     service mysqld start
 fi
 echo "Mysql started."
+mysql -uroot -p$my_passwd dgame_game_db_1 -e 'CREATE TABLE `cross_rankboard` (
+  `vKey` varchar(64) NOT NULL,
+  `bValue` mediumblob,
+  PRIMARY KEY (`vKey`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
 
 #服务器改名（sql改名、mysql备份脚本ip、存储过程服务器名、SVS_ID、crontab）
 sed -i 's/精灵王子/'$2'/g' /home/script/dataware/*
