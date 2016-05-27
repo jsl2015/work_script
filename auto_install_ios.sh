@@ -23,7 +23,11 @@ if [ `ls /homebak | wc -l` -eq 0 ];then
     service mysqld start
 fi
 echo "Mysql started."
-
+mysql -uroot -p$my_passwd dgame_game_db_1 -e 'CREATE TABLE `cross_rankboard` (
+  `vKey` varchar(64) NOT NULL,
+  `bValue` mediumblob,
+  PRIMARY KEY (`vKey`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
 #服务器改名（sql改名、mysql备份脚本ip、存储过程服务器名、SVS_ID、crontab）
 sed -i 's/虚幻之风/'$2'/g' /home/script/dataware/*
 sed -i 's/myIP=115.159.39.35/myIP='$3'/g' /home/script/mysqlbackup.sh
