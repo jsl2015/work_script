@@ -1,6 +1,7 @@
 #! /bin/bash
 #usage: sh auto_install.sh SVS_ID 服务器名 IP
 
+my_passwd="EK3FMif4pPQY"
 #挂载云盘
 mkdir /homebak
 mv /home/* /homebak/
