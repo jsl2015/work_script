@@ -4,7 +4,7 @@ dir1=/var/www/html
 dir2=/usr/local/backup
 
 #备份
-for i in appstore hsjsapp;do
+for i in appstore hsjsapp xkwyapp;do
     cd $dir1/$i/gameweb
     tar czf $dir2/$i.`date +%m-%d`.tar.gz  *
     find $dir2 -mtime +3 | xargs rm -fr {}
@@ -13,7 +13,7 @@ echo "tar finished."
 
 #配置
 cd $dir1
-for i in appstore hsjsapp;do
+for i in appstore hsjsapp xkwyapp;do
 #取到区服号
     old_area_code=`awk '/name/ {print $6}' $i/gameweb/backdoor.txt | cut -b2,3`
     new_area_code=$(($old_area_code+1))
