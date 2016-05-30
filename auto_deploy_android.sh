@@ -1,6 +1,7 @@
 #! /bin/bash
 #usage: sh android_auto_deploy.sh tool_id  服务器名 IP
 
+my_passwd="EK3FMif4pPQY"
 dir1=/var/www/html
 dir2=/usr/local/src/lilith_op
 dir3=/usr/local/back
@@ -64,5 +65,11 @@ sed -i "/'oss00"$1"'/s/"$old_name"/"$2"/" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$old_tool_id"':{/h; //G" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$old_tool_id"':{/{x;s/^/./;/^.\{2\}$/{x;s/oss00"$old_tool_id"/oss00"$1"/;b};x}" $dir2/conf/server_cfg.py
 sed -i "/'oss00"$1"'/s/"$old_ip"/"$3"/" $dir2/conf/server_cfg.py
+
+###################################把oss工具号加入oss库server表
+old_id=`mysql -uroot -p$my_passwd -e 'select max(id) from oss.servers;'| grep -v "max(id)"`
+id=$(($old_id+1))
+echo "id is $id".
+mysql -uroot -p$my_passwd -e 'insert into oss.servers(id,name) values('$id',"oss00'$1'")'
 
 echo "deploy finished."
