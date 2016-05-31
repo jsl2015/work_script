@@ -5,12 +5,12 @@ my_passwd=EK3FMif4pPQY
 mysql=/usr/bin/mysql
 back_dir=/home/back_hefu
 hefu_file=/home/hefu/hefu_server/ebin/hefu_server.app
-master_ip=10.105.224.199
-master_id=111
-slave1_ip=10.105.28.134
-slave1_id=112
-slave2_ip=0
-slave2_id=0
+master_ip=10.105.211.129
+master_id=56
+slave1_ip=10.105.119.31
+slave1_id=57
+slave2_ip=10.105.118.14
+slave2_id=58
 
 cd /home/server
 sh stop.sh
@@ -48,6 +48,7 @@ while :
                 	select vSerial,vFrom,vUin,dtEventTime,iOrderMoney,iGoodsId,iGoodsCnt,iStatus,b.iUserId  
                 	from test.charge_2 a, dgame_game_db_1.user b 
                 	where a.vUin = b.vDeviceId;" -uroot -p$my_passwd
+		else echo "Please put charge_2.sql into /home."
 		fi
         break
 	fi
