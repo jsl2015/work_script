@@ -64,5 +64,11 @@ sed -i "/'oss"$1"'/s/"$old_name"/"$2"/" $dir2/conf/server_cfg.py
 sed -i "/'oss"$old_tool_id"':{/h; //G" $dir2/conf/server_cfg.py
 sed -i "/'oss"$old_tool_id"':{/{x;s/^/./;/^.\{2\}$/{x;s/oss"$old_tool_id"/oss"$1"/;b};x}" $dir2/conf/server_cfg.py
 sed -i "/'oss"$1"'/s/"$old_ip"/"$3"/" $dir2/conf/server_cfg.py
+###################################把oss工具号加入oss库server表
+old_id=`mysql -uroot -p$my_passwd -e 'select max(id) from oss.servers;'| grep -v "max(id)"`
+id=$(($old_id+1))
+echo "id is $id".
+mysql -uroot -p$my_passwd -e 'insert into oss.servers(id,name) values('$id',"oss'$1'")'
 
 echo "deploy finished."
+
