@@ -31,6 +31,7 @@ mysql -uroot -p$my_passwd dgame_game_db_1 -e 'CREATE TABLE `cross_rankboard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
 
 #服务器改名（sql改名、mysql备份脚本ip、存储过程服务器名、SVS_ID、crontab）
+sed -i 's/--exclude "deploy_cfg.ini"/--exclude "deploy_cfg.ini" --exclude "common_cfg.ini" /g' /home/script/rsy_djsy.sh
 sed -i 's/精灵王子/'$2'/g' /home/script/dataware/*
 sed -i 's/myIP=182.254.245.135/myIP='$3'/g' /home/script/mysqlbackup.sh
 sed -i 's/SVS_ID=51/SVS_ID='$1'/g' /home/server/deploy_cfg.ini
