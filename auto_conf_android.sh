@@ -16,7 +16,7 @@ echo "tar finished."
 cd $dir1
 for i in tencent uc 1 android ;do
 #取到区服号
-    old_area_code=`awk '/name/ {print $6}' $i/gameweb/backdoor.txt | cut -b2,3`
+    old_area_code=`awk -F'"' '/name/{ print $4}' $i/gameweb/backdoor.txt | awk '{split($0,a,"Çø");print a[1]}'`
     new_area_code=$(($old_area_code+1))
 
 #config backdoor.txt
