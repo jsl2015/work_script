@@ -15,7 +15,8 @@ mv /opt/$(ls /opt|grep tomcat) $tomcat_dir
 #jdk环境变量
 echo 'export JAVA_HOME=/opt/jdk1.8.0_121
 export PATH=$PATH:$JAVA_HOME/bin
-export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar' >> /etc/profile && source /etc/profile
+export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar' >> /etc/profile 
+source /etc/profile
 
 #修改端口;日志切割
 sed -i 's/<Connector port="8080"/<Connector port="80"/g' $tomcat_dir/conf/server.xml
